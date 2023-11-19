@@ -66,9 +66,6 @@ public class VuePrincipale extends JFrame {
         add(panelInfoConnect, BorderLayout.NORTH);
         panelInfoConnect.setBorder(BorderFactory.createStrokeBorder(new BasicStroke(3.0f), Color.BLACK));
 
-
-
-
         // Ajout du JPanel "Login" centré sur la hauteur mais aligné à gauche
         JPanel panelLogin = createPanelWithLabelAndTextField("Login");
 
@@ -93,6 +90,14 @@ public class VuePrincipale extends JFrame {
 
         // Ajout du JPanel "NewCl" à côté du bouton "Connection"
         JPanel panelNewCl = createNewClientPanel();
+
+
+        // Ajout du JPanel "PanelMarche" en dessous de "PanelInfoConnect"
+        JPanel panelMarche = new JPanel();
+        panelMarche.setPreferredSize(new Dimension(840, 50));
+        panelMarche.setBackground(Color.BLUE);
+        getContentPane().add(panelMarche, BorderLayout.CENTER);
+
 
         panelInfoConnect.add(panelNewCl);
 
