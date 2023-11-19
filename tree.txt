@@ -1,0 +1,19 @@
+Structure du dossier pour le volume Windows-SSD
+Le numéro de série du volume est CCA2-AFB0
+C:.
+¦   .gitignore
+¦   tree.txt
+¦   
++---src
+    ¦   Main.java
+    ¦   
+    +---AutresThreads
+    +---Controleurs
+    ¦       Controleur.java
+    ¦       
+    +---GUI
+    ¦       VuePrincipale.java
+    ¦       
+    +---Modele
+    +---Protocoles
+    +---Tests
