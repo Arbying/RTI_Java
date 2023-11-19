@@ -3,6 +3,7 @@ package GUI;
 import Controleurs.Controleur;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,6 +21,7 @@ public class VuePrincipale extends JFrame {
     }
 
     private void initComposants() {
+        setResizable(false);
         JMenuBar menuBar = new JMenuBar();
 
         // Menu Fichier
@@ -56,6 +58,43 @@ public class VuePrincipale extends JFrame {
         menuFichier.add(itemQuitter);
 
         menuBar.add(menuFichier);
+
+        // Ajout du JPanel "InfoConnect"
+        JPanel panelInfoConnect = new JPanel();
+        panelInfoConnect.setPreferredSize(new Dimension(840, 50));
+       // panelInfoConnect.setBackground(Color.YELLOW);
+        add(panelInfoConnect, BorderLayout.NORTH);
+        panelInfoConnect.setBorder(BorderFactory.createStrokeBorder(new BasicStroke(3.0f), Color.BLACK));
+
+
+
+
+        // Ajout du JPanel "Login" centré sur la hauteur mais aligné à gauche
+        JPanel panelLogin = createPanelWithLabelAndTextField("Login");
+
+        // Ajout du JPanel "Mot de passe" à côté du champ "Login"
+        JPanel panelMotDePasse = createPanelWithLabelAndTextField("Mot de passe");
+
+        // Créer un JPanel pour centrer le panelLogin et panelMotDePasse sur la hauteur
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
+        centerPanel.add(Box.createHorizontalGlue());  // Espace flexible à gauche
+        centerPanel.add(panelLogin);
+        centerPanel.add(Box.createRigidArea(new Dimension(10, 0)));  // Espace fixe entre Login et Mot de passe
+        centerPanel.add(panelMotDePasse);
+        centerPanel.add(Box.createHorizontalGlue());  // Espace flexible à droite
+
+        panelInfoConnect.add(centerPanel);
+
+        // Ajout du JPanel "Connection" à côté du champ "Mot de passe"
+        JPanel panelConnection = createConnectionPanel();
+
+        panelInfoConnect.add(panelConnection);
+
+        // Ajout du JPanel "NewCl" à côté du bouton "Connection"
+        JPanel panelNewCl = createNewClientPanel();
+
+        panelInfoConnect.add(panelNewCl);
 
         // Menu Navigation
         JMenu menuNavigation = new JMenu("Navigation");
@@ -168,12 +207,60 @@ public class VuePrincipale extends JFrame {
         setJMenuBar(menuBar);
     }
 
+    private JPanel createNewClientPanel() {
+        JPanel panel = new JPanel();
+        panel.setPreferredSize(new Dimension(150, 30));
+       // panel.setBackground(Color.ORANGE);
+
+        JLabel labelNewClient = new JLabel("Nouveau");
+        JCheckBox checkBoxNewClient = new JCheckBox();
+
+        panel.add(labelNewClient);
+        panel.add(checkBoxNewClient);
+
+        return panel;
+    }
+
+    private JPanel createPanelWithLabelAndTextField(String label) {
+        JPanel panel = new JPanel();
+        panel.setPreferredSize(new Dimension(200, 30));
+       // panel.setBackground(Color.WHITE);
+
+        JLabel panelLabel = new JLabel(label);
+        JTextField textField = new JTextField(10);
+
+        panel.add(panelLabel);
+        panel.add(textField);
+
+        return panel;
+    }
+
+    private JPanel createConnectionPanel() {
+        JPanel panel = new JPanel();
+        panel.setPreferredSize(new Dimension(100, 30));
+        //panel.setBackground(Color.GREEN);
+
+        JButton buttonConnection = new JButton("Connection");
+
+        buttonConnection.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Action when the "Connection" button is clicked
+                JOptionPane.showMessageDialog(VuePrincipale.this, "Action Connection");
+            }
+        });
+
+        panel.add(buttonConnection);
+
+        return panel;
+    }
+
     public static void main(String[] args) {
         // Création de la vue de lancement
         VueLancement vueLancement = new VueLancement();
 
         // Définir une minuterie pour fermer la vue de lancement après 5 secondes
-        Timer timer = new Timer(5000, new ActionListener() {
+        Timer timer = new Timer(500, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Fermer la vue de lancement après 5 secondes

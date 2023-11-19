@@ -24,6 +24,7 @@ C:.
 ¦           ¦       VuePrincipale$10.class
 ¦           ¦       VuePrincipale$11.class
 ¦           ¦       VuePrincipale$12.class
+¦           ¦       VuePrincipale$13.class
 ¦           ¦       VuePrincipale$2.class
 ¦           ¦       VuePrincipale$3.class
 ¦           ¦       VuePrincipale$4.class
