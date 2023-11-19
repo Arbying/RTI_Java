@@ -19,9 +19,19 @@ C:.
 ¦           ¦       Controleur.class
 ¦           ¦       
 ¦           +---GUI
+¦           ¦       VueLancement.class
 ¦           ¦       VuePrincipale$1.class
+¦           ¦       VuePrincipale$10.class
+¦           ¦       VuePrincipale$11.class
+¦           ¦       VuePrincipale$12.class
 ¦           ¦       VuePrincipale$2.class
 ¦           ¦       VuePrincipale$3.class
+¦           ¦       VuePrincipale$4.class
+¦           ¦       VuePrincipale$5.class
+¦           ¦       VuePrincipale$6.class
+¦           ¦       VuePrincipale$7.class
+¦           ¦       VuePrincipale$8.class
+¦           ¦       VuePrincipale$9.class
 ¦           ¦       VuePrincipale.class
 ¦           ¦       
 ¦           +---Modele
@@ -42,6 +52,7 @@ C:.
     ¦       Controleur.java
     ¦       
     +---GUI
+    ¦       VueLancement.java
     ¦       VuePrincipale.java
     ¦       
     +---Modele
