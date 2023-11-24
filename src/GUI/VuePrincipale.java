@@ -156,15 +156,27 @@ public class VuePrincipale extends JFrame {
         EstNouveau.setEnabled(etat);
     }
 
+    // ----------- GET -----------------
+    public JButton getJBoutonLogin() {
+        return JBoutonLogin;
+    }
+    public JTextField getTextFieldLogin() {
+        return textFieldLogin;
+    }
+
+    public JTextField getTextFieldMDP() {
+        return textFieldMDP;
+    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             VuePrincipale vue = new VuePrincipale();
-            Controleur controleur = new Controleur();
+            Controleur controleur = new Controleur(vue); // Passer la référence à la vue au constructeur du contrôleur
             vue.setControleur(controleur); // Définir la référence au contrôleur dans la vue
-            controleur.setVue(vue); // Définir la référence à la vue dans le contrôleur
 
         });
     }
+
 
 }

@@ -5,15 +5,37 @@ import GUI.VuePrincipale;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+
+
 
 public class Controleur {
 
     private VuePrincipale vue;
     private Singleton modele;
+    private JButton JBoutonLogin;
 
-    public Controleur() {
+
+    public Controleur(VuePrincipale vue) {
         this.vue = null; // Initialisez la vue à null par défaut
         this.modele = Singleton.getInstance();
+
+        JBoutonLogin = vue.getJBoutonLogin();
+        JBoutonLogin.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Gestion de l'événement du bouton JBoutonLogin
+                String login = vue.getTextFieldLogin().getText();
+                String mdp = vue.getTextFieldMDP().getText();
+
+                // Affichez les valeurs en console
+                System.out.println("Login : " + login);
+                System.out.println("Mot de passe : " + mdp);
+            }
+        });
+
+
 
         // Ajoutez un écouteur de changement de propriété au modèle
         modele.addPropertyChangeListener(new PropertyChangeListener() {
