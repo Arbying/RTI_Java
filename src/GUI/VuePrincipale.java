@@ -1,6 +1,7 @@
 package GUI;
 
 import Controleurs.*;
+import AutresThreads.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,11 +11,16 @@ import java.awt.event.ActionListener;
 public class VuePrincipale extends JFrame {
 
     private Controleur controleur; // Référence au contrôleur
+
+    private JMenuItem quitterItem;
+
+
     private JTextField textFieldLogin;
     private JTextField textFieldMDP;
     private JButton JBoutonLogin;
     private JButton JBoutonLogout;
     private JCheckBox EstNouveau;
+
 
     public VuePrincipale() {
         // Configuration de la fenêtre principale
@@ -25,7 +31,7 @@ public class VuePrincipale extends JFrame {
         // Barre de menus
         JMenuBar menuBar = new JMenuBar();
         JMenu fichierMenu = new JMenu("Fichier");
-        JMenuItem quitterItem = new JMenuItem("Quitter");
+        quitterItem = new JMenuItem("Quitter");
 
         quitterItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -157,16 +163,24 @@ public class VuePrincipale extends JFrame {
     }
 
     // ----------- GET -----------------
+
+    public JMenuItem getQuitterItem() {
+        return quitterItem;
+    }
+
+
+
     public JButton getJBoutonLogin() {
         return JBoutonLogin;
     }
     public JTextField getTextFieldLogin() {
         return textFieldLogin;
     }
-
     public JTextField getTextFieldMDP() {
         return textFieldMDP;
     }
+    public JCheckBox getEstNouveau() {return EstNouveau;}
+    public JButton getJBoutonLogout() {return JBoutonLogout;}
 
 
     public static void main(String[] args) {

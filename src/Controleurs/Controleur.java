@@ -1,41 +1,49 @@
 package Controleurs;
 
 import GUI.VuePrincipale;
-
-
+import AutresThreads.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-
-
 public class Controleur {
 
     private VuePrincipale vue;
     private Singleton modele;
-    private JButton JBoutonLogin;
 
+    private JButton JBoutonLogin;
+    private JButton JBoutonLogout;
 
     public Controleur(VuePrincipale vue) {
-        this.vue = null; // Initialisez la vue à null par défaut
+        this.vue = vue;
         this.modele = Singleton.getInstance();
 
         JBoutonLogin = vue.getJBoutonLogin();
-        JBoutonLogin.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Gestion de l'événement du bouton JBoutonLogin
-                String login = vue.getTextFieldLogin().getText();
-                String mdp = vue.getTextFieldMDP().getText();
+        JBoutonLogout = vue.getJBoutonLogout();
 
-                // Affichez les valeurs en console
-                System.out.println("Login : " + login);
-                System.out.println("Mot de passe : " + mdp);
+        // MENUS
+        // FICHIER
+        vue.getQuitterItem().addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                quitterApplication();
             }
         });
 
+        // PARTIE LOGIN
+        JBoutonLogin.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                handleLoginButtonClick();
+            }
+        });
 
+        // PARTIE LOGOUT
+        JBoutonLogout.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                handleLogoutButtonClick();
+            }
+        });
 
         // Ajoutez un écouteur de changement de propriété au modèle
         modele.addPropertyChangeListener(new PropertyChangeListener() {
@@ -58,6 +66,31 @@ public class Controleur {
         this.vue = vue;
     }
 
+    private void quitterApplication() {
+        if (Singleton.getInstance().isEstConnecte()) {
+            ThLogout thLogout = new ThLogout();
+            thLogout.start();
+        }
+        System.exit(0);
+    }
 
-    // Configurer les interactions entre la vue et le modèle ici
+    private void handleLoginButtonClick() {
+        String login = vue.getTextFieldLogin().getText();
+        String mdp = vue.getTextFieldMDP().getText();
+        boolean NouveauClient = vue.getEstNouveau().isSelected();
+
+        // Affichez les valeurs en console
+        System.out.println("Login : " + login);
+        System.out.println("Mot de passe : " + mdp);
+
+        ThLogin thLogin = new ThLogin(login, mdp, NouveauClient);
+        thLogin.start();
+        System.out.println("------------------------------------");
+    }
+
+    private void handleLogoutButtonClick() {
+        modele.setEstConnecte(false);
+        ThLogout thLogout = new ThLogout();
+        thLogout.start();
+    }
 }

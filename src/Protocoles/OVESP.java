@@ -1,5 +1,7 @@
 package Protocoles;
 
+import Controleurs.*;
+
 public class OVESP {
 
     private static String TypeReponse;
@@ -22,6 +24,7 @@ public class OVESP {
             // Récupérer la partie du string après "LOGIN2#"
             if (response.startsWith("LOGIN2#")) {
                 JeReponds = response.substring("LOGIN2#".length());
+
                 return JeReponds;
             } else {
                 // En cas de réponse invalide pour LOGIN2, définissons JeReponds comme "ERREUR"

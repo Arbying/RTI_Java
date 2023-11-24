@@ -5,7 +5,7 @@ import Modele.Client;
 public class TestClient {
     public static void main(String[] args) {
         // Création d'un nouveau client
-        Client client = new Client("utilisateur1", "motDePasse123", true);
+        Client client = new Client(1,"utilisateur1", "motDePasse123", true);
 
         // Affichage des informations initiales du client
         System.out.println("Login: " + client.getLogin());
