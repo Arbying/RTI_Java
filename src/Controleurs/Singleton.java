@@ -16,11 +16,11 @@ public class Singleton {
     private boolean estConnecte;
 
     private Singleton() {
-        client = null; // Aucun client connecté au début
-        articleEnCours = null; // Aucun article sélectionné au début
-        panier = new ArrayList<>(); // Initialisation du panier
-        total = 0.0f; // Initialisation du total à 0
-        estConnecte = false; // Le client n'est pas connecté au début
+        client = null;
+        articleEnCours = null;
+        panier = new ArrayList<>();
+        total = 0.0f;
+        estConnecte = false;
     }
 
     public static Singleton getInstance() {
@@ -30,7 +30,14 @@ public class Singleton {
         return instance;
     }
 
-    // Getters et Setters pour chaque attribut
+    public void majTotal() {
+        total = 0.0f;
+        for (Article article : panier) {
+            total += article.getPrix() * (float) article.getQuantiteDemandee();
+        }
+    }
+
+    // Getters et setters pour les attributs
 
     public Client getClient() {
         return client;
@@ -64,14 +71,6 @@ public class Singleton {
         this.total = total;
     }
 
-    public void majTotal() {
-        total = 0.0f; // Réinitialiser le total à 0
-
-        for (Article article : panier) {
-            total += article.getPrix() * (float) article.getQuantiteDemandee();
-        }
-    }
-
     public boolean isEstConnecte() {
         return estConnecte;
     }
@@ -79,6 +78,4 @@ public class Singleton {
     public void setEstConnecte(boolean estConnecte) {
         this.estConnecte = estConnecte;
     }
-
-    // Vous pouvez ajouter d'autres méthodes utiles ici, comme pour ajouter/supprimer des articles du panier, etc.
 }
