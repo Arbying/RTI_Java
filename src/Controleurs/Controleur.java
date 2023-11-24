@@ -39,11 +39,19 @@ public class Controleur {
         });
 
         // PARTIE LOGOUT
-        JBoutonLogout.addActionListener(new ActionListener() {
+        vue.getLogoutItem().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 handleLogoutButtonClick();
             }
         });
+
+        //PARTIE CHANGER MOT DE PASSE
+        vue.getChangerMdpItem().addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                afficherBoiteDialogue();
+            }
+        });
+
 
         // Ajoutez un écouteur de changement de propriété au modèle
         modele.addPropertyChangeListener(new PropertyChangeListener() {
@@ -57,6 +65,13 @@ public class Controleur {
                     vue.setModificationEtat(!nouvelleValeur);
                 }
                 // Ajoutez d'autres gestionnaires de propriété au besoin
+            }
+        });
+
+        // PARTIE LOGIN (élément de menu)
+        vue.getLoginItem().addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                handleLoginButtonClick();
             }
         });
     }
@@ -92,5 +107,10 @@ public class Controleur {
         modele.setEstConnecte(false);
         ThLogout thLogout = new ThLogout();
         thLogout.start();
+    }
+
+    // Méthode pour afficher la boîte de dialogue
+    private void afficherBoiteDialogue() {
+        JOptionPane.showMessageDialog(vue, "Cette fonctionnalité est réservée à la version payante :P", "DEMO", JOptionPane.INFORMATION_MESSAGE);
     }
 }

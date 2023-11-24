@@ -71,7 +71,6 @@ public class ThLogin extends Thread {
                 }
                 else
                 {
-                    System.out.println("Dans le dernier ELSE");
                     int idClient = Integer.parseInt(temp) ;
                     Client ceClient = new Client(idClient, login, mdp, estNouveau);
                     Singleton.getInstance().setClient(ceClient);
@@ -80,6 +79,7 @@ public class ThLogin extends Thread {
 
                     ThChangeArtcile thArt = new ThChangeArtcile();
                     thArt.start();
+                    this.interrupt();
 
                 }
 
