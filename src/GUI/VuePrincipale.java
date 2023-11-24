@@ -1,6 +1,7 @@
 package GUI;
 
 import Controleurs.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,6 +10,11 @@ import java.awt.event.ActionListener;
 public class VuePrincipale extends JFrame {
 
     private Controleur controleur; // Référence au contrôleur
+    private JTextField textFieldLogin;
+    private JTextField textFieldMDP;
+    private JButton JBoutonLogin;
+    private JButton JBoutonLogout;
+    private JCheckBox EstNouveau;
 
     public VuePrincipale() {
         // Configuration de la fenêtre principale
@@ -38,7 +44,7 @@ public class VuePrincipale extends JFrame {
         identificationPanel.setPreferredSize(new Dimension(800, 50));
         identificationPanel.setLayout(new GridLayout(1, 5, 0, 0));
 
-// Cellule 1
+        // Cellule 1
         JPanel cell1 = new JPanel(new BorderLayout());
         cell1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         cell1.setPreferredSize(new Dimension(200, 50)); // Taille de la cellule 1
@@ -46,15 +52,14 @@ public class VuePrincipale extends JFrame {
         JLabel label1 = new JLabel("User");
         label1.setHorizontalAlignment(JLabel.CENTER); // Centrer le texte
 
-        JTextField textField1 = new JTextField();
-        textField1.setName("Login"); // Identifiant "Login"
-        textField1.setHorizontalAlignment(JTextField.CENTER); // Centrer le texte
-        textField1.setPreferredSize(new Dimension(100, 22)); // Définir la taille du champ texte (100x22 pixels)
-        textField1.setEditable(!Singleton.getInstance().isEstConnecte());
+        textFieldLogin = new JTextField();
+        textFieldLogin.setName("Login"); // Identifiant "Login"
+        textFieldLogin.setHorizontalAlignment(JTextField.CENTER); // Centrer le texte
+        textFieldLogin.setPreferredSize(new Dimension(100, 22)); // Définir la taille du champ texte (100x22 pixels)
         cell1.add(label1, BorderLayout.NORTH);
-        cell1.add(textField1, BorderLayout.CENTER);
+        cell1.add(textFieldLogin, BorderLayout.CENTER);
 
-// Cellule 2
+        // Cellule 2
         JPanel cell2 = new JPanel(new BorderLayout());
         cell2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         cell2.setPreferredSize(new Dimension(200, 50)); // Taille de la cellule 2
@@ -62,37 +67,38 @@ public class VuePrincipale extends JFrame {
         JLabel label2 = new JLabel("Mot de passe");
         label2.setHorizontalAlignment(JLabel.CENTER); // Centrer le texte
 
-        JTextField textField2 = new JTextField();
-        textField2.setName("MDP"); // Identifiant "MDP"
-        textField2.setHorizontalAlignment(JTextField.CENTER); // Centrer le texte
-        textField2.setPreferredSize(new Dimension(100, 22)); // Définir la taille du champ texte (100x22 pixels)
+        textFieldMDP = new JTextField();
+        textFieldMDP.setName("MDP"); // Identifiant "MDP"
+        textFieldMDP.setHorizontalAlignment(JTextField.CENTER); // Centrer le texte
+        textFieldMDP.setPreferredSize(new Dimension(100, 22)); // Définir la taille du champ texte (100x22 pixels)
 
         cell2.add(label2, BorderLayout.NORTH);
-        cell2.add(textField2, BorderLayout.CENTER);
+        cell2.add(textFieldMDP, BorderLayout.CENTER);
 
-// Cellule 3
+        // Cellule 3
         JPanel cell3 = new JPanel(new BorderLayout());
         cell3.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         cell3.setPreferredSize(new Dimension(200, 50)); // Taille de la cellule 3
 
-        JButton button3 = new JButton("Login");
-        button3.setBackground(Color.GREEN); // Fond vert pomme
-        button3.setHorizontalAlignment(JButton.CENTER); // Centrer le bouton
+        JBoutonLogin = new JButton("Login");
+        JBoutonLogin.setBackground(Color.GREEN); // Fond vert pomme
+        JBoutonLogin.setHorizontalAlignment(JButton.CENTER); // Centrer le bouton
 
-        cell3.add(button3, BorderLayout.CENTER);
+        cell3.add(JBoutonLogin, BorderLayout.CENTER);
 
-// Cellule 4
+        // Cellule 4
         JPanel cell4 = new JPanel(new BorderLayout());
         cell4.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         cell4.setPreferredSize(new Dimension(200, 50)); // Taille de la cellule 4
 
-        JButton button4 = new JButton("LogOUT");
-        button4.setBackground(Color.ORANGE); // Fond orange
-        button4.setHorizontalAlignment(JButton.CENTER); // Centrer le bouton
+        JBoutonLogout = new JButton("LogOUT");
+        JBoutonLogout.setBackground(Color.ORANGE); // Fond orange
+        JBoutonLogout.setHorizontalAlignment(JButton.CENTER); // Centrer le bouton
+        JBoutonLogout.setEnabled(false);
 
-        cell4.add(button4, BorderLayout.CENTER);
+        cell4.add(JBoutonLogout, BorderLayout.CENTER);
 
-// Cellule 5
+        // Cellule 5
         JPanel cell5 = new JPanel(new BorderLayout());
         cell5.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         cell5.setPreferredSize(new Dimension(200, 50)); // Taille de la cellule 5
@@ -100,14 +106,14 @@ public class VuePrincipale extends JFrame {
         JLabel label5 = new JLabel("Nouveau client");
         label5.setHorizontalAlignment(JLabel.CENTER); // Centrer le texte
 
-        JCheckBox checkBox5 = new JCheckBox();
-        checkBox5.setName("JeSuisLePetitNouveau"); // Identifiant "JeSuisLePetitNouveau"
-        checkBox5.setHorizontalAlignment(JCheckBox.CENTER); // Centrer la case à cocher
+        EstNouveau = new JCheckBox();
+        EstNouveau.setName("JeSuisLePetitNouveau"); // Identifiant "JeSuisLePetitNouveau"
+        EstNouveau.setHorizontalAlignment(JCheckBox.CENTER); // Centrer la case à cocher
 
         cell5.add(label5, BorderLayout.NORTH);
-        cell5.add(checkBox5, BorderLayout.CENTER);
+        cell5.add(EstNouveau, BorderLayout.CENTER);
 
-// Ajouter les cellules au identificationPanel
+        // Ajouter les cellules au identificationPanel
         identificationPanel.add(cell1);
         identificationPanel.add(cell2);
         identificationPanel.add(cell3);
@@ -115,17 +121,6 @@ public class VuePrincipale extends JFrame {
         identificationPanel.add(cell5);
 
         add(identificationPanel, BorderLayout.NORTH);
-
-
-
-
-
-
-
-
-
-
-
 
         // JPanel de Magasin (au milieu)
         JPanel magasinPanel = new JPanel();
@@ -153,12 +148,23 @@ public class VuePrincipale extends JFrame {
         this.controleur = controleur;
     }
 
+    public void setModificationEtat(boolean etat) {
+        textFieldLogin.setEditable(etat);
+        textFieldMDP.setEditable(etat);
+        JBoutonLogin.setEnabled(etat);
+        JBoutonLogout.setEnabled(!etat);
+        EstNouveau.setEnabled(etat);
+    }
+
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             VuePrincipale vue = new VuePrincipale();
             Controleur controleur = new Controleur();
             vue.setControleur(controleur); // Définir la référence au contrôleur dans la vue
             controleur.setVue(vue); // Définir la référence à la vue dans le contrôleur
+
         });
     }
+
 }
