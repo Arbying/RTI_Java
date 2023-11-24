@@ -64,4 +64,15 @@ public class Article {
     public void setImage(String image) {
         this.image = image;
     }
+
+    public String toString() {
+        return "Article{" +
+                "idArticle=" + idArticle +
+                ", denomination='" + denomination + '\'' +
+                ", prix=" + prix +
+                ", quantiteDisponible=" + quantiteDisponible +
+                ", quantiteDemandee=" + quantiteDemandee +
+                ", image='" + image + '\'' +
+                '}';
+    }
 }
