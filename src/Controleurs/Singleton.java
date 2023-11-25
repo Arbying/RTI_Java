@@ -96,6 +96,15 @@ public class Singleton {
         this.panier = panier;
     }
 
+    public void ViderPanier() {
+        // Vide le panier
+        panier.clear();
+
+        // Met à jour le total après avoir vidé le panier
+        majTotal();
+    }
+
+
     public float getTotal() {
         return total;
     }

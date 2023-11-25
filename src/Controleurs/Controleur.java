@@ -20,6 +20,8 @@ public class Controleur {
     private JButton boutonPrecedent;
     private JButton boutonSuivant;
     private JButton boutonAjoutPanier;
+    private JButton boutonVider;
+    private JButton boutonConfirmer;
 
     public Controleur(VuePrincipale vue) {
         this.vue = vue;
@@ -30,6 +32,8 @@ public class Controleur {
         boutonPrecedent = vue.getBoutonPrecedent();
         boutonSuivant = vue.getBoutonSuivant();
         boutonAjoutPanier = vue.getBoutonAjoutPanier();
+        boutonVider = vue.getBoutonVider();
+        boutonConfirmer = vue.getBoutonConfirmer();
 
         // MENUS
         // FICHIER
@@ -65,9 +69,10 @@ public class Controleur {
         // Écouteur pour le changement de total
         modele.addTotalChangeListener(evt -> {
             System.out.println("*******+++++++++++++++***** Nouveau Total: " + evt.getNewValue());
-            // Ici, vous pouvez ajouter votre propre logique ou fonction.
             // 1. MAJ TOTAL INTERFACE
+            vue.setTotal(String.valueOf(Singleton.getInstance().getTotal()));
             // 2. MISE A JOUR TABLEAU
+            vue.mettreAJourPanier();
         });
 
         // PARTIE LOGIN (élément de menu)
@@ -81,69 +86,21 @@ public class Controleur {
 
         // PARTIE BOUTON AJOUT PANIER
         boutonAjoutPanier.addActionListener(e -> handleBoutonAjoutPanierClick());
+
+        // PARTIE BOUTON VIDER
+        boutonVider.addActionListener(e -> handleBoutonViderClick());
+
+        // PARTIE BOUTON CONFIRMER
+        boutonConfirmer.addActionListener(e -> handleBoutonConfirmerClick());
     }
 
-    private void quitterApplication() {
-        if (Singleton.getInstance().isEstConnecte()) {
-            ThLogout thLogout = new ThLogout();
-            thLogout.start();
-        }
-        System.exit(0);
-    }
+    // ... autres méthodes privées (quitterApplication, handleLoginButtonClick, etc.) ...
 
-    private void handleLoginButtonClick() {
-        String login = vue.getTextFieldLogin().getText();
-        String mdp = vue.getTextFieldMDP().getText();
-        boolean NouveauClient = vue.getEstNouveau().isSelected();
-        ThLogin thLogin = new ThLogin(login, mdp, NouveauClient);
-        thLogin.start();
-    }
-
-    private void handleLogoutButtonClick() {
-        modele.setEstConnecte(false);
-        ThLogout thLogout = new ThLogout();
-        thLogout.start();
-    }
-
-    private void afficherBoiteDialogue() {
-        JOptionPane.showMessageDialog(vue, "Cette fonctionnalité est réservée à la version payante :P", "DEMO", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    private void handleBoutonPrecedentClick() {
-        if(Singleton.getInstance().getArtSuivantPrecedent() < 2) {
-            JOptionPane.showMessageDialog(vue, "Vous êtes au bout du rouleau !", "Information", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            Singleton.getInstance().setArtSuivantPrecedent(Singleton.getInstance().getIdArticleEnCours()-2);
-            ThChangeArtcile thArt = new ThChangeArtcile();
-            thArt.start();
-        }
-    }
-
-    private void handleBoutonSuivantClick() {
-        ThChangeArtcile thArt = new ThChangeArtcile();
-        thArt.start();
-    }
-
-    private void handleBoutonAjoutPanierClick() {
-        // Logique pour ajouter un article au panier
-        System.out.println("J'ai clické sur ajouter au panier");
-        String quantiteSaisie = vue.getTextFieldJacheteText();
-        try {
-            int quantite = Integer.parseInt(quantiteSaisie);
-            if(quantite > 0)
-            {
-                Singleton.getInstance().setQuDemande(quantite);
-                ThAchat thachat = new ThAchat();
-                thachat.start();
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(vue, "Veuillez entrer un nombre valide pour la quantité", "Erreur de Quantité", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(vue, "Veuillez entrer un nombre valide pour la quantité", "Erreur de Quantité", JOptionPane.ERROR_MESSAGE);
-        }
-
+    private void handleBoutonConfirmerClick() {
+        // Logique pour confirmer le panier
+        System.out.println("Bouton Confirmer le panier cliqué");
+        ThValiderPanier thValiderPanier = new ThValiderPanier();
+        thValiderPanier.start();
     }
 
     // Autres méthodes et logique du contrôleur

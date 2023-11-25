@@ -35,7 +35,7 @@ public class ThAchat extends Thread {
             }
 
             // Attendez la réponse du serveur
-            byte[] buffer = new byte[1500]; // Définissez la taille du tampon selon vos besoins
+            byte[] buffer = new byte[1500];
             int bytesRead = TCP.receive(maSocket, buffer);
 
             if (bytesRead > 0) {
