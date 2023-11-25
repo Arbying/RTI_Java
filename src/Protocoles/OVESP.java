@@ -2,6 +2,8 @@ package Protocoles;
 
 import Controleurs.*;
 import Modele.*;
+import javax.swing.JOptionPane;
+
 
 public class OVESP {
 
@@ -77,6 +79,41 @@ public class OVESP {
                 System.out.println("Réponse invalide : Insuffisamment de parties.");
             }
         }
+        else if (TypeReponse.startsWith("ACHAT2")) {
+            // Divisez la chaîne de caractères en sous-parties en utilisant le délimiteur "#"
+            String[] artParts = response.split("#");
+
+            // Vérifiez si la réponse est de type succès (e.g., "ACHAT2#blablabla#123#456")
+            if (artParts.length >= 5) {
+                try {
+                    // Extract QuOK (partie 3)
+                    int QuOK = Integer.parseInt(artParts[3]);
+
+                    Singleton.getInstance().getArticleEnCours().setQuantiteDemandee(QuOK);
+                    Singleton.getInstance().getPanier().add(Singleton.getInstance().getArticleEnCours());
+                    System.out.println("DANS OVESP : " + Singleton.getInstance().getArticleEnCours().toString());
+
+                    //Singleton.getInstance().getArticleEnCours().setQuantiteDemandee(0);
+                    //Singleton.getInstance().setQuDemande(0);
+                    Singleton.getInstance().majTotal();
+                    System.out.println("TOTAL :" + Singleton.getInstance().getTotal());
+
+
+                    // Affichez ou utilisez la valeur QuOK
+
+                    System.out.println("Quantité OK : " + QuOK);
+                } catch (NumberFormatException e) {
+                    // Gérer les erreurs de conversion ici
+                    System.out.println("Erreur de conversion de données.");
+                }
+            }
+            // Vérifiez si la réponse est un message d'erreur (e.g., "ACHAT#KO")
+            else if (response.equals("ACHAT#KO")) {
+                // Affichez une boîte de dialogue indiquant l'erreur
+                JOptionPane.showMessageDialog(null, "Vérifiez la quantité disponible", "Erreur d'achat", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
         else
         {
             return "MERDE";

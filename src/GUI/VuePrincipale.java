@@ -1,13 +1,19 @@
 package GUI;
 
-import Controleurs.Controleur;
+import Controleurs.*;
 import AutresThreads.*;
+import Modele.*;
+
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
+
+
 
 public class VuePrincipale extends JFrame {
 
@@ -35,6 +41,15 @@ public class VuePrincipale extends JFrame {
 
 
     private JLabel imageLabel = new JLabel();
+
+    private JPanel panierPanel;
+    private DefaultTableModel modelePanier;
+    private JTable tableArticles;
+    private JButton boutonSupprimer;
+    private JButton boutonVider;
+    private JButton boutonConfirmer;
+    private JTextField totalField;
+
 
     public VuePrincipale() {
         // Configuration de la fenêtre principale
@@ -198,7 +213,7 @@ public class VuePrincipale extends JFrame {
 
 
 
-// Panneau droit
+
 // Panneau droit
         JPanel droitPanel = new JPanel(new GridLayout(2, 1)); // Utilisation d'un GridLayout à 2 lignes et 1 colonne
 
@@ -240,12 +255,60 @@ public class VuePrincipale extends JFrame {
 
 
         // JPanel de Panier (en bas)
-        JPanel panierPanel = new JPanel();
+        panierPanel = new JPanel();
+        panierPanel.setLayout(new GridLayout(1, 2)); // Grille avec 2 colonnes
         panierPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        panierPanel.add(new JLabel("Contenu du Panier"));
+
+// Modèle de la table pour le panier
+        modelePanier = new DefaultTableModel(new Object[]{"Article", "Prix Unitaire", "Quantité"}, 0);
+
+// Créer la JTable pour les articles
+        tableArticles = new JTable(modelePanier);
+        JScrollPane scrollPane = new JScrollPane(tableArticles); // Permet le défilement
+
+// Panneau de gauche pour la JTable
+        JPanel gauchePanierPanel = new JPanel(new BorderLayout());
+        gauchePanierPanel.setPreferredSize(new Dimension(500, 100)); // Largeur 500
+        gauchePanierPanel.add(scrollPane, BorderLayout.CENTER);
+
+// Panneau de droite pour les boutons et le total
+        JPanel droitPanierPanel = new JPanel();
+        droitPanierPanel.setLayout(new BoxLayout(droitPanierPanel, BoxLayout.Y_AXIS));
+        droitPanierPanel.setPreferredSize(new Dimension(300, 100)); // Largeur 300
+
+// Boutons
+        boutonSupprimer = new JButton("Supprimer Article");
+        boutonSupprimer.setEnabled(false);
+
+        boutonVider = new JButton("Vider Panier");
+        boutonVider.setEnabled(false);
+
+        boutonConfirmer = new JButton("Confirmer achat");
+        boutonConfirmer.setEnabled(false);
+
+        droitPanierPanel.add(boutonSupprimer);
+        droitPanierPanel.add(boutonVider);
+        droitPanierPanel.add(boutonConfirmer);
+
+// Panel pour le total
+        JPanel totalPanel = new JPanel();
+        totalPanel.setLayout(new FlowLayout());
+        JLabel labelTotal = new JLabel("Total : ");
+        totalField = new JTextField(10); // Zone de texte pour le total
+        totalPanel.add(labelTotal);
+        totalPanel.add(totalField);
+
+        droitPanierPanel.add(totalPanel);
+
+// Ajout des sous-panneaux au panierPanel
+        panierPanel.add(gauchePanierPanel);
+        panierPanel.add(droitPanierPanel);
+
+// Ajout du panierPanel au panel principal
         centerSouthPanel.add(panierPanel);
 
         add(centerSouthPanel, BorderLayout.CENTER);
+
 
         // Centrer la fenêtre sur l'écran
         setLocationRelativeTo(null);
@@ -271,6 +334,9 @@ public class VuePrincipale extends JFrame {
         boutonSuivant.setEnabled(!etat);
         boutonPrecedent.setEnabled(!etat);
         boutonAjoutPanier.setEnabled(!etat);
+        boutonSupprimer.setEnabled(!etat);
+        boutonConfirmer.setEnabled(!etat);
+        boutonVider.setEnabled(!etat);
     }
 
     // Méthodes pour obtenir les éléments du menu
@@ -326,6 +392,19 @@ public class VuePrincipale extends JFrame {
         return boutonAjoutPanier;
     }
 
+    public JButton getBoutonSupprimer() {
+        return boutonSupprimer;
+    }
+
+    public JButton getBoutonVider() {
+        return boutonVider;
+    }
+
+    public JButton getBoutonConfirmer() {
+        return boutonConfirmer;
+    }
+
+
 
     // --------------------------- SET
     public void setImageInGauchePanel(ImageIcon imageIcon) {
@@ -341,6 +420,26 @@ public class VuePrincipale extends JFrame {
 
     public void setTextFieldStockText(String text) {
         textFieldStock.setText(text);
+    }
+    public void setTotal(String total) {
+        totalField.setText(total);
+    }
+    public void mettreAJourPanier() {
+        List<Article> articles = Singleton.getInstance().getPanier();
+        DefaultTableModel modele = (DefaultTableModel) tableArticles.getModel();
+        modele.setRowCount(0); // Efface les données existantes
+
+        for (Article article : articles) {
+            Object[] ligne = {
+                    article.getDenomination(),
+                    article.getPrix(),
+                    article.getQuantiteDemandee()
+            };
+            modele.addRow(ligne); // Ajoute chaque article comme une ligne dans le modèle
+        }
+
+        // Mettre à jour le total
+        setTotal(String.valueOf(Singleton.getInstance().getTotal()));
     }
 
 

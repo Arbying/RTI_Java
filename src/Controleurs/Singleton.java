@@ -1,7 +1,6 @@
 package Controleurs;
 
 import Modele.*;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.net.Socket;
@@ -14,15 +13,17 @@ public class Singleton {
     private Client client;
     private int IdArticleEnCours = 0;
 
-    private int artSuivantPrecedent = 0;  // Nouvel attribut
+    private int artSuivantPrecedent = 0;
     private Article articleEnCours;
     private List<Article> panier;
     private float total;
     private boolean estConnecte;
     private Socket maSocket;
+    private int QuDemande;
 
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private PropertyChangeSupport idArticleChangeSupport = new PropertyChangeSupport(this);
+    private PropertyChangeSupport totalChangeSupport = new PropertyChangeSupport(this); // Ajout pour total
 
     private Singleton() {
         client = null;
@@ -41,14 +42,18 @@ public class Singleton {
     }
 
     public void majTotal() {
+        float oldTotal = this.total;
+        System.out.println("Je suis dans MAJ TOTAL .... ");
         total = 0.0f;
         for (Article article : panier) {
+            System.out.println("J'analuse " + article.toString());
             total += article.getPrix() * (float) article.getQuantiteDemandee();
+            System.out.println("Je parcours une LIGNE");
         }
+        totalChangeSupport.firePropertyChange("total", oldTotal, total); // Notification du changement
     }
 
     // Getters et setters pour les attributs
-
     public Client getClient() {
         return client;
     }
@@ -61,11 +66,18 @@ public class Singleton {
         return IdArticleEnCours;
     }
 
+    public void setQuDemande(int Qu)
+    {
+        this.QuDemande = Qu;
+    }
+    public int getQuDemande(){
+        return QuDemande;
+    }
+
     public void setIdArticleEnCours(int IdArticleEnCours) {
         int oldIdArticleEnCours = this.IdArticleEnCours;
         this.IdArticleEnCours = IdArticleEnCours;
         idArticleChangeSupport.firePropertyChange("IdArticleEnCours", oldIdArticleEnCours, IdArticleEnCours);
-        System.out.println("Changement de IdArticleEnCours : " + IdArticleEnCours);
     }
 
     public Article getArticleEnCours() {
@@ -89,7 +101,9 @@ public class Singleton {
     }
 
     public void setTotal(float total) {
+        float oldTotal = this.total;
         this.total = total;
+        totalChangeSupport.firePropertyChange("total", oldTotal, total);
     }
 
     public boolean isEstConnecte() {
@@ -118,6 +132,7 @@ public class Singleton {
         this.artSuivantPrecedent = artSuivantPrecedent;
     }
 
+    // Méthodes pour l'écoute des changements de propriété
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.addPropertyChangeListener(listener);
     }
@@ -132,5 +147,13 @@ public class Singleton {
 
     public void removeIdArticleChangeListener(PropertyChangeListener listener) {
         idArticleChangeSupport.removePropertyChangeListener(listener);
+    }
+
+    public void addTotalChangeListener(PropertyChangeListener listener) {
+        totalChangeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removeTotalChangeListener(PropertyChangeListener listener) {
+        totalChangeSupport.removePropertyChangeListener(listener);
     }
 }

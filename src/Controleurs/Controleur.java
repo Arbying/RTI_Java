@@ -33,116 +33,54 @@ public class Controleur {
 
         // MENUS
         // FICHIER
-        vue.getQuitterItem().addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                quitterApplication();
-            }
-        });
+        vue.getQuitterItem().addActionListener(e -> quitterApplication());
 
         // PARTIE LOGIN
-        JBoutonLogin.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                handleLoginButtonClick();
-            }
-        });
+        JBoutonLogin.addActionListener(e -> handleLoginButtonClick());
 
         // PARTIE LOGOUT
-        vue.getLogoutItem().addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                handleLogoutButtonClick();
-            }
-        });
+        vue.getLogoutItem().addActionListener(e -> handleLogoutButtonClick());
 
         // PARTIE CHANGER MOT DE PASSE
-        vue.getChangerMdpItem().addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                afficherBoiteDialogue();
+        vue.getChangerMdpItem().addActionListener(e -> afficherBoiteDialogue());
+
+        // Écouteur pour IdArticleEnCours
+        modele.addIdArticleChangeListener(evt -> {
+            String adresseImage = "images/" + Singleton.getInstance().getArticleEnCours().getImage();
+            ImageIcon imageIcon = new ImageIcon(new ImageIcon(adresseImage).getImage().getScaledInstance(220, 220, Image.SCALE_SMOOTH));
+            vue.setImageInGauchePanel(imageIcon);
+
+            vue.setTextFieldArticleText(Singleton.getInstance().getArticleEnCours().getDenomination());
+            vue.setTextFieldStockText(String.valueOf(Singleton.getInstance().getArticleEnCours().getQuantiteDisponible()));
+            vue.setTextFieldPrixText(String.valueOf(Singleton.getInstance().getArticleEnCours().getPrix()));
+        });
+
+        // Écouteur pour les changements de propriété généraux
+        modele.addPropertyChangeListener(evt -> {
+            if ("estConnecte".equals(evt.getPropertyName())) {
+                vue.setModificationEtat(!(boolean) evt.getNewValue());
             }
         });
 
-        // Ajoutez un écouteur de changement de propriété au modèle pour IdArticleEnCours
-        modele.addIdArticleChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                // Mettez à jour la vue en fonction du nouvel IDArticleEnCours ici
-                System.out.println("Changement de IdArticleEnCours ************** : " + evt.getNewValue());
-
-                String AdresseImage = Singleton.getInstance().getArticleEnCours().getImage();
-                String cheminImages = "images/"; // Le chemin vers le dossier images
-
-                // Combiner le chemin du dossier images avec le nom de l'image
-                String adresseImageComplete = cheminImages + AdresseImage;
-
-                // Charger l'image en tant qu'ImageIcon
-                ImageIcon imageIcon = new ImageIcon(adresseImageComplete); // Assurez-vous que AdresseImage est un chemin valide
-                System.out.println(adresseImageComplete);
-
-                // Redimensionner l'image si nécessaire
-                Image image = imageIcon.getImage(); // Transformer l'ImageIcon en Image pour redimensionnement
-                Image newimg = image.getScaledInstance(220, 220, java.awt.Image.SCALE_SMOOTH); // Redimensionner
-                imageIcon = new ImageIcon(newimg); // Re-transformer en ImageIcon
-
-                // Mettre à jour la vue avec la nouvelle image
-                vue.setImageInGauchePanel(imageIcon);
-                System.out.println("Vue mise à jour ... ");
-
-                vue.setTextFieldArticleText(Singleton.getInstance().getArticleEnCours().getDenomination());
-                vue.setTextFieldStockText(String.valueOf(Singleton.getInstance().getArticleEnCours().getQuantiteDisponible()));
-                vue.setTextFieldPrixText(String.valueOf(Singleton.getInstance().getArticleEnCours().getPrix()));
-            }
-        });
-
-        // Ajoutez un écouteur de changement de propriété au modèle
-        modele.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                // Gérez ici les changements de propriété du modèle
-                String propertyName = evt.getPropertyName();
-                if ("estConnecte".equals(propertyName)) {
-                    boolean nouvelleValeur = (boolean) evt.getNewValue();
-                    // Mettez à jour la vue en fonction de la nouvelle valeur
-                    vue.setModificationEtat(!nouvelleValeur);
-                } else if ("IdArticleEnCours".equals(propertyName)) {
-                    System.out.println("J AI ETE PREVENU !!!!!!!!!!!!!!!!");
-                    // Récupération de l'adresse de l'image de l'article en cours
-                } else {
-                    System.out.println("RIEN");
-                }
-            }
+        // Écouteur pour le changement de total
+        modele.addTotalChangeListener(evt -> {
+            System.out.println("*******+++++++++++++++***** Nouveau Total: " + evt.getNewValue());
+            // Ici, vous pouvez ajouter votre propre logique ou fonction.
+            // 1. MAJ TOTAL INTERFACE
+            // 2. MISE A JOUR TABLEAU
         });
 
         // PARTIE LOGIN (élément de menu)
-        vue.getLoginItem().addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                handleLoginButtonClick();
-            }
-        });
+        vue.getLoginItem().addActionListener(e -> handleLoginButtonClick());
 
         // PARTIE BOUTON PRECEDENT
-        boutonPrecedent.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                handleBoutonPrecedentClick();
-            }
-        });
+        boutonPrecedent.addActionListener(e -> handleBoutonPrecedentClick());
 
         // PARTIE BOUTON SUIVANT
-        boutonSuivant.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                handleBoutonSuivantClick();
-            }
-        });
+        boutonSuivant.addActionListener(e -> handleBoutonSuivantClick());
 
         // PARTIE BOUTON AJOUT PANIER
-        boutonAjoutPanier.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                handleBoutonAjoutPanierClick();
-            }
-        });
-    }
-
-    // Méthode pour définir la référence à la vue
-    public void setVue(VuePrincipale vue) {
-        this.vue = vue;
+        boutonAjoutPanier.addActionListener(e -> handleBoutonAjoutPanierClick());
     }
 
     private void quitterApplication() {
@@ -157,14 +95,8 @@ public class Controleur {
         String login = vue.getTextFieldLogin().getText();
         String mdp = vue.getTextFieldMDP().getText();
         boolean NouveauClient = vue.getEstNouveau().isSelected();
-
-        // Affichez les valeurs en console
-        System.out.println("Login : " + login);
-        System.out.println("Mot de passe : " + mdp);
-
         ThLogin thLogin = new ThLogin(login, mdp, NouveauClient);
         thLogin.start();
-        System.out.println("------------------------------------");
     }
 
     private void handleLogoutButtonClick() {
@@ -173,21 +105,14 @@ public class Controleur {
         thLogout.start();
     }
 
-    // Méthode pour afficher la boîte de dialogue
     private void afficherBoiteDialogue() {
         JOptionPane.showMessageDialog(vue, "Cette fonctionnalité est réservée à la version payante :P", "DEMO", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    // Méthodes pour gérer les clics sur les boutons
-
     private void handleBoutonPrecedentClick() {
-        System.out.println("Précédent");
-        if(Singleton.getInstance().getArtSuivantPrecedent() < 2)
-        {
+        if(Singleton.getInstance().getArtSuivantPrecedent() < 2) {
             JOptionPane.showMessageDialog(vue, "Vous êtes au bout du rouleau !", "Information", JOptionPane.INFORMATION_MESSAGE);
-        }
-        else
-        {
+        } else {
             Singleton.getInstance().setArtSuivantPrecedent(Singleton.getInstance().getIdArticleEnCours()-2);
             ThChangeArtcile thArt = new ThChangeArtcile();
             thArt.start();
@@ -195,13 +120,31 @@ public class Controleur {
     }
 
     private void handleBoutonSuivantClick() {
-        System.out.println("Suivant");
         ThChangeArtcile thArt = new ThChangeArtcile();
         thArt.start();
     }
 
     private void handleBoutonAjoutPanierClick() {
-        System.out.println("Ajouté au panier");
-        // !!!!!! Véridier si la convertion est CORRECTE OU PAS !!!!!
+        // Logique pour ajouter un article au panier
+        System.out.println("J'ai clické sur ajouter au panier");
+        String quantiteSaisie = vue.getTextFieldJacheteText();
+        try {
+            int quantite = Integer.parseInt(quantiteSaisie);
+            if(quantite > 0)
+            {
+                Singleton.getInstance().setQuDemande(quantite);
+                ThAchat thachat = new ThAchat();
+                thachat.start();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(vue, "Veuillez entrer un nombre valide pour la quantité", "Erreur de Quantité", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(vue, "Veuillez entrer un nombre valide pour la quantité", "Erreur de Quantité", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
+
+    // Autres méthodes et logique du contrôleur
 }
