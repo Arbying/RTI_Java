@@ -22,6 +22,7 @@ public class Controleur {
     private JButton boutonAjoutPanier;
     private JButton boutonVider;
     private JButton boutonConfirmer;
+    private JButton boutonSupprimer;
 
     public Controleur(VuePrincipale vue) {
         this.vue = vue;
@@ -34,6 +35,7 @@ public class Controleur {
         boutonAjoutPanier = vue.getBoutonAjoutPanier();
         boutonVider = vue.getBoutonVider();
         boutonConfirmer = vue.getBoutonConfirmer();
+        boutonSupprimer = vue.getBoutonSupprimer();
 
         // MENUS
         // FICHIER
@@ -92,9 +94,79 @@ public class Controleur {
 
         // PARTIE BOUTON CONFIRMER
         boutonConfirmer.addActionListener(e -> handleBoutonConfirmerClick());
+
+        boutonSupprimer.addActionListener(e -> handleBoutonSupprimerClick());
     }
 
-    // ... autres méthodes privées (quitterApplication, handleLoginButtonClick, etc.) ...
+    private void quitterApplication() {
+        if (Singleton.getInstance().isEstConnecte()) {
+            ThLogout thLogout = new ThLogout();
+            thLogout.start();
+        }
+        System.exit(0);
+    }
+
+    private void handleLoginButtonClick() {
+        String login = vue.getTextFieldLogin().getText();
+        String mdp = vue.getTextFieldMDP().getText();
+        boolean NouveauClient = vue.getEstNouveau().isSelected();
+        ThLogin thLogin = new ThLogin(login, mdp, NouveauClient);
+        thLogin.start();
+    }
+
+    private void handleLogoutButtonClick() {
+        modele.setEstConnecte(false);
+        ThLogout thLogout = new ThLogout();
+        thLogout.start();
+        Singleton.getInstance().ViderPanier();
+    }
+
+    private void afficherBoiteDialogue() {
+        JOptionPane.showMessageDialog(vue, "Cette fonctionnalité est réservée à la version payante :P", "DEMO", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void handleBoutonPrecedentClick() {
+        if(Singleton.getInstance().getArtSuivantPrecedent() < 2) {
+            JOptionPane.showMessageDialog(vue, "Vous êtes au bout du rouleau !", "Information", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            Singleton.getInstance().setArtSuivantPrecedent(Singleton.getInstance().getIdArticleEnCours()-2);
+            ThChangeArtcile thArt = new ThChangeArtcile();
+            thArt.start();
+        }
+    }
+
+    private void handleBoutonSuivantClick() {
+        ThChangeArtcile thArt = new ThChangeArtcile();
+        thArt.start();
+    }
+
+    private void handleBoutonAjoutPanierClick() {
+        // Logique pour ajouter un article au panier
+        System.out.println("J'ai clické sur ajouter au panier");
+        String quantiteSaisie = vue.getTextFieldJacheteText();
+        try {
+            int quantite = Integer.parseInt(quantiteSaisie);
+            if(quantite > 0)
+            {
+                Singleton.getInstance().setQuDemande(quantite);
+                ThAchat thachat = new ThAchat();
+                thachat.start();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(vue, "Veuillez entrer un nombre valide pour la quantité", "Erreur de Quantité", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(vue, "Veuillez entrer un nombre valide pour la quantité", "Erreur de Quantité", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void handleBoutonViderClick() {
+        // Logique pour vider le panier
+        System.out.println("Bouton Vider le panier cliqué");
+        ThVidePanier thVidePanier = new ThVidePanier();
+        thVidePanier.start();
+    }
 
     private void handleBoutonConfirmerClick() {
         // Logique pour confirmer le panier
@@ -103,5 +175,16 @@ public class Controleur {
         thValiderPanier.start();
     }
 
-    // Autres méthodes et logique du contrôleur
+    private void handleBoutonSupprimerClick() {
+        int indice = vue.getIndiceTableau();
+        if (indice != -1) {
+            ThSupprimerLigne thSupprimerLigne = new ThSupprimerLigne(indice);
+            thSupprimerLigne.start();
+        } else {
+            JOptionPane.showMessageDialog(vue, "Aucun article sélectionné", "Erreur de Suppression", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
+
 }

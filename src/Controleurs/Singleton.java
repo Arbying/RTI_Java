@@ -103,6 +103,15 @@ public class Singleton {
         // Met à jour le total après avoir vidé le panier
         majTotal();
     }
+    public void EnleveDuPanier(int indice) {
+        if (indice >= 0 && indice < panier.size()) {
+            panier.remove(indice);
+            majTotal();
+        } else {
+            System.out.println("Indice non valide : " + indice);
+        }
+    }
+
 
 
     public float getTotal() {

@@ -442,6 +442,9 @@ public class VuePrincipale extends JFrame {
         setTotal(String.valueOf(Singleton.getInstance().getTotal()));
     }
 
+    public int getIndiceTableau() {
+        return tableArticles.getSelectedRow();
+    }
 
 
     // ----------------------- MAIN
