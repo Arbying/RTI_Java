@@ -12,7 +12,9 @@ public class Singleton {
     private static Singleton instance;
 
     private Client client;
-    private int IdArticleEnCours = 0; // Nouvel attribut
+    private int IdArticleEnCours = 0;
+
+    private int artSuivantPrecedent = 0;  // Nouvel attribut
     private Article articleEnCours;
     private List<Article> panier;
     private float total;
@@ -106,6 +108,14 @@ public class Singleton {
 
     public void setMaSocket(Socket maSocket) {
         this.maSocket = maSocket;
+    }
+
+    public int getArtSuivantPrecedent() {
+        return artSuivantPrecedent;
+    }
+
+    public void setArtSuivantPrecedent(int artSuivantPrecedent) {
+        this.artSuivantPrecedent = artSuivantPrecedent;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {

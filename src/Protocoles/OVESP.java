@@ -62,6 +62,7 @@ public class OVESP {
 
                     Singleton.getInstance().setArticleEnCours(monArticleEnCours);
                     Singleton.getInstance().setIdArticleEnCours(IdArt);
+                    Singleton.getInstance().setArtSuivantPrecedent(IdArt);
 
                     // Affichez les valeurs extraites
                     System.out.println("Mon Singleton contient : " + Singleton.getInstance().getArticleEnCours().toString());

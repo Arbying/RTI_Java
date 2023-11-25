@@ -182,21 +182,26 @@ public class Controleur {
 
     private void handleBoutonPrecedentClick() {
         System.out.println("Précédent");
-        if(Singleton.getInstance().getIdArticleEnCours() < 2)
+        if(Singleton.getInstance().getArtSuivantPrecedent() < 2)
         {
             JOptionPane.showMessageDialog(vue, "Vous êtes au bout du rouleau !", "Information", JOptionPane.INFORMATION_MESSAGE);
         }
         else
         {
-
+            Singleton.getInstance().setArtSuivantPrecedent(Singleton.getInstance().getIdArticleEnCours()-2);
+            ThChangeArtcile thArt = new ThChangeArtcile();
+            thArt.start();
         }
     }
 
     private void handleBoutonSuivantClick() {
         System.out.println("Suivant");
+        ThChangeArtcile thArt = new ThChangeArtcile();
+        thArt.start();
     }
 
     private void handleBoutonAjoutPanierClick() {
         System.out.println("Ajouté au panier");
+        // !!!!!! Véridier si la convertion est CORRECTE OU PAS !!!!!
     }
 }

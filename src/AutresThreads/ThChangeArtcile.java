@@ -22,8 +22,7 @@ public class ThChangeArtcile extends Thread {
 
         try {
             // Envoyez la requête "ARTSUIVANT#0" au serveur
-            sleep(5000);
-            String art = "" + Singleton.getInstance().getIdArticleEnCours();
+            String art = "" + Singleton.getInstance().getArtSuivantPrecedent();
             String requete = "ARTSUIVANT#" + art;
             byte[] requeteBytes = requete.getBytes();
             int sentBytes = TCP.send(maSocket, requeteBytes, requeteBytes.length);
@@ -39,7 +38,7 @@ public class ThChangeArtcile extends Thread {
 
             if (bytesRead > 0) {
                 String reponse = new String(buffer, 0, bytesRead);
-                System.out.println("Article en cours AVANT  = " + Singleton.getInstance().getIdArticleEnCours());
+                System.out.println("Article en cours AVANT  = " + Singleton.getInstance().getArtSuivantPrecedent());
                 // Utilisez OVESP pour traiter la réponse
                 String typeReponse = Protocoles.OVESP.processResponse(reponse);
 
