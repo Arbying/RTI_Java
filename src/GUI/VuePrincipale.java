@@ -1,9 +1,10 @@
 package GUI;
 
-import Controleurs.*;
+import Controleurs.Controleur;
 import AutresThreads.*;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -68,70 +69,44 @@ public class VuePrincipale extends JFrame {
         // Cellule 1 (User)
         JPanel cell1 = new JPanel(new BorderLayout());
         cell1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        cell1.setPreferredSize(new Dimension(200, 50));
-
         JLabel label1 = new JLabel("User");
         label1.setHorizontalAlignment(JLabel.CENTER);
-
         textFieldLogin = new JTextField();
-        textFieldLogin.setName("Login");
         textFieldLogin.setHorizontalAlignment(JTextField.CENTER);
-        textFieldLogin.setPreferredSize(new Dimension(100, 22));
-
         cell1.add(label1, BorderLayout.NORTH);
         cell1.add(textFieldLogin, BorderLayout.CENTER);
 
         // Cellule 2 (Mot de passe)
         JPanel cell2 = new JPanel(new BorderLayout());
         cell2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        cell2.setPreferredSize(new Dimension(200, 50));
-
         JLabel label2 = new JLabel("Mot de passe");
         label2.setHorizontalAlignment(JLabel.CENTER);
-
         textFieldMDP = new JTextField();
-        textFieldMDP.setName("MDP");
         textFieldMDP.setHorizontalAlignment(JTextField.CENTER);
-        textFieldMDP.setPreferredSize(new Dimension(100, 22));
-
         cell2.add(label2, BorderLayout.NORTH);
         cell2.add(textFieldMDP, BorderLayout.CENTER);
 
         // Cellule 3 (Login button)
         JPanel cell3 = new JPanel(new BorderLayout());
         cell3.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        cell3.setPreferredSize(new Dimension(200, 50));
-
         JBoutonLogin = new JButton("Login");
         JBoutonLogin.setBackground(Color.GREEN);
-        JBoutonLogin.setHorizontalAlignment(JButton.CENTER);
-
         cell3.add(JBoutonLogin, BorderLayout.CENTER);
 
         // Cellule 4 (Logout button)
         JPanel cell4 = new JPanel(new BorderLayout());
         cell4.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        cell4.setPreferredSize(new Dimension(200, 50));
-
         JBoutonLogout = new JButton("LogOUT");
         JBoutonLogout.setBackground(Color.ORANGE);
-        JBoutonLogout.setHorizontalAlignment(JButton.CENTER);
         JBoutonLogout.setEnabled(false);
-
         cell4.add(JBoutonLogout, BorderLayout.CENTER);
 
         // Cellule 5 (Nouveau client)
         JPanel cell5 = new JPanel(new BorderLayout());
         cell5.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        cell5.setPreferredSize(new Dimension(200, 50));
-
         JLabel label5 = new JLabel("Nouveau client");
         label5.setHorizontalAlignment(JLabel.CENTER);
-
         EstNouveau = new JCheckBox();
-        EstNouveau.setName("JeSuisLePetitNouveau");
-        EstNouveau.setHorizontalAlignment(JCheckBox.CENTER);
-
         cell5.add(label5, BorderLayout.NORTH);
         cell5.add(EstNouveau, BorderLayout.CENTER);
 
@@ -144,19 +119,22 @@ public class VuePrincipale extends JFrame {
 
         add(identificationPanel, BorderLayout.NORTH);
 
+        // Création d'un panneau pour Magasin et Panier
+        JPanel centerSouthPanel = new JPanel(new GridLayout(2, 1));
+
         // JPanel de Magasin (au milieu)
         JPanel magasinPanel = new JPanel();
-        // Ajoutez les composants GUI du magasin ici
-        // magasinPanel.add(new JLabel("Liste des produits : "));
-        // magasinPanel.add(new JList<>(listeDesProduits));
-        add(magasinPanel, BorderLayout.CENTER);
+        magasinPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        magasinPanel.add(new JLabel("Contenu du Magasin"));
+        centerSouthPanel.add(magasinPanel);
 
         // JPanel de Panier (en bas)
         JPanel panierPanel = new JPanel();
-        // Ajoutez les composants GUI du panier ici
-        // panierPanel.add(new JLabel("Panier : "));
-        // panierPanel.add(new JList<>(contenuDuPanier));
-        add(panierPanel, BorderLayout.SOUTH);
+        panierPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        panierPanel.add(new JLabel("Contenu du Panier"));
+        centerSouthPanel.add(panierPanel);
+
+        add(centerSouthPanel, BorderLayout.CENTER);
 
         // Centrer la fenêtre sur l'écran
         setLocationRelativeTo(null);
@@ -169,8 +147,6 @@ public class VuePrincipale extends JFrame {
     public void setControleur(Controleur controleur) {
         this.controleur = controleur;
     }
-
-
 
     public void setModificationEtat(boolean etat) {
         textFieldLogin.setEditable(etat);
@@ -222,9 +198,19 @@ public class VuePrincipale extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            VuePrincipale vue = new VuePrincipale();
-            Controleur controleur = new Controleur(vue);
-            vue.setControleur(controleur);
+            VueLancement vueLancement = new VueLancement();
+            vueLancement.setVisible(true);
+
+            Timer timer = new Timer(5000, e -> {
+                vueLancement.dispose();
+                VuePrincipale vuePrincipale = new VuePrincipale();
+                Controleur controleur = new Controleur(vuePrincipale);
+                vuePrincipale.setControleur(controleur);
+                vuePrincipale.setVisible(true);
+            });
+
+            timer.setRepeats(false);
+            timer.start();
         });
     }
 }

@@ -20,6 +20,7 @@ public class Singleton {
     private Socket maSocket;
 
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+    private PropertyChangeSupport idArticleChangeSupport = new PropertyChangeSupport(this);
 
     private Singleton() {
         client = null;
@@ -59,7 +60,9 @@ public class Singleton {
     }
 
     public void setIdArticleEnCours(int IdArticleEnCoours) {
+        int oldIdArticleEnCoours = this.IdArticleEnCoours;
         this.IdArticleEnCoours = IdArticleEnCoours;
+        idArticleChangeSupport.firePropertyChange("IdArticleEnCoours", oldIdArticleEnCoours, IdArticleEnCoours);
     }
 
     public Article getArticleEnCours() {
@@ -110,5 +113,13 @@ public class Singleton {
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.removePropertyChangeListener(listener);
+    }
+
+    public void addIdArticleChangeListener(PropertyChangeListener listener) {
+        idArticleChangeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removeIdArticleChangeListener(PropertyChangeListener listener) {
+        idArticleChangeSupport.removePropertyChangeListener(listener);
     }
 }

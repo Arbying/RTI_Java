@@ -61,6 +61,7 @@ public class OVESP {
                     Article monArticleEnCours = new Article(IdArt, Denomination, Prix, QuDispo, 0, Image);
 
                     Singleton.getInstance().setArticleEnCours(monArticleEnCours);
+                    Singleton.getInstance().setIdArticleEnCours(IdArt);
 
                     // Affichez les valeurs extraites
                     System.out.println("Mon Singleton contient : " + Singleton.getInstance().getArticleEnCours().toString());
