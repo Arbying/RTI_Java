@@ -12,7 +12,7 @@ public class Singleton {
     private static Singleton instance;
 
     private Client client;
-    private int IdArticleEnCoours = 0; // Nouvel attribut
+    private int IdArticleEnCours = 0; // Nouvel attribut
     private Article articleEnCours;
     private List<Article> panier;
     private float total;
@@ -56,13 +56,14 @@ public class Singleton {
     }
 
     public int getIdArticleEnCours() {
-        return IdArticleEnCoours;
+        return IdArticleEnCours;
     }
 
-    public void setIdArticleEnCours(int IdArticleEnCoours) {
-        int oldIdArticleEnCoours = this.IdArticleEnCoours;
-        this.IdArticleEnCoours = IdArticleEnCoours;
-        idArticleChangeSupport.firePropertyChange("IdArticleEnCoours", oldIdArticleEnCoours, IdArticleEnCoours);
+    public void setIdArticleEnCours(int IdArticleEnCours) {
+        int oldIdArticleEnCours = this.IdArticleEnCours;
+        this.IdArticleEnCours = IdArticleEnCours;
+        idArticleChangeSupport.firePropertyChange("IdArticleEnCours", oldIdArticleEnCours, IdArticleEnCours);
+        System.out.println("Changement de IdArticleEnCours : " + IdArticleEnCours);
     }
 
     public Article getArticleEnCours() {

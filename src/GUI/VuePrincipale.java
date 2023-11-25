@@ -24,6 +24,18 @@ public class VuePrincipale extends JFrame {
     private JButton JBoutonLogout;
     private JCheckBox EstNouveau;
 
+    private JTextField textFieldArticle;
+    private JTextField textFieldPrix;
+    private JTextField textFieldStock;
+    private JTextField textFieldJachete;
+
+    private JButton boutonPrecedent;
+    private JButton boutonSuivant;
+    private JButton boutonAjoutPanier;
+
+
+    private JLabel imageLabel = new JLabel();
+
     public VuePrincipale() {
         // Configuration de la fenêtre principale
         setTitle("Application de Vente de Légumes");
@@ -122,11 +134,110 @@ public class VuePrincipale extends JFrame {
         // Création d'un panneau pour Magasin et Panier
         JPanel centerSouthPanel = new JPanel(new GridLayout(2, 1));
 
-        // JPanel de Magasin (au milieu)
+// JPanel de Magasin (au milieu)
         JPanel magasinPanel = new JPanel();
+        magasinPanel.setLayout(new BoxLayout(magasinPanel, BoxLayout.X_AXIS));
         magasinPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        magasinPanel.add(new JLabel("Contenu du Magasin"));
+
+// Panneau gauche
+        JPanel gauchePanel = new JPanel(new GridBagLayout());
+        gauchePanel.setPreferredSize(new Dimension(250, 100));
+        gauchePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        gauchePanel.add(imageLabel);
+
+
+// Panneau central
+        // Panneau central avec GridBagLayout
+        JPanel centrePanel = new JPanel(new GridBagLayout());
+        centrePanel.setPreferredSize(new Dimension(300, 100));
+        centrePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(5, 5, 5, 5); // Marge entre les composants
+
+// Labels
+        JLabel labelArticle = new JLabel("Article:");
+        JLabel labelPrix = new JLabel("Prix:");
+        JLabel labelStock = new JLabel("Stock:");
+        JLabel labelJachete = new JLabel("J'achète:");
+
+// TextFields
+        textFieldArticle = new JTextField(20); // Vous pouvez spécifier la largeur ici
+        textFieldPrix = new JTextField(20);
+        textFieldStock = new JTextField(20);
+        textFieldJachete = new JTextField(20);
+
+// Ajout des composants avec GridBagConstraints
+        constraints.gridx = 0; // Colonne 0
+        constraints.gridy = 0; // Ligne 0
+        centrePanel.add(labelArticle, constraints);
+
+        constraints.gridx = 1; // Colonne 1
+        centrePanel.add(textFieldArticle, constraints);
+
+        constraints.gridx = 0; // Colonne 0
+        constraints.gridy = 1; // Ligne 1
+        centrePanel.add(labelPrix, constraints);
+
+        constraints.gridx = 1; // Colonne 1
+        centrePanel.add(textFieldPrix, constraints);
+
+        constraints.gridx = 0; // Colonne 0
+        constraints.gridy = 2; // Ligne 2
+        centrePanel.add(labelStock, constraints);
+
+        constraints.gridx = 1; // Colonne 1
+        centrePanel.add(textFieldStock, constraints);
+
+        constraints.gridx = 0; // Colonne 0
+        constraints.gridy = 3; // Ligne 3
+        centrePanel.add(labelJachete, constraints);
+
+        constraints.gridx = 1; // Colonne 1
+        centrePanel.add(textFieldJachete, constraints);
+
+
+
+// Panneau droit
+// Panneau droit
+        JPanel droitPanel = new JPanel(new GridLayout(2, 1)); // Utilisation d'un GridLayout à 2 lignes et 1 colonne
+
+// Créez le panneau pour les boutons de navigation
+        JPanel boutonsNavigationPanel = new JPanel(new GridLayout(1, 2)); // Utilisation d'un GridLayout à 1 ligne et 2 colonnes
+
+// Bouton <<
+        boutonPrecedent = new JButton(" << ");
+        boutonPrecedent.setEnabled(false);
+        boutonsNavigationPanel.add(boutonPrecedent);
+
+// Bouton >>
+        boutonSuivant = new JButton(" >> ");
+        boutonSuivant.setEnabled(false);
+        boutonsNavigationPanel.add(boutonSuivant);
+
+// Créez le panneau pour le bouton "Ajout panier"
+        JPanel boutonAjoutPanierPanel = new JPanel();
+
+// Bouton "Ajout panier"
+        boutonAjoutPanier = new JButton("Ajout panier");
+        boutonAjoutPanier.setEnabled(false);
+        boutonAjoutPanierPanel.add(boutonAjoutPanier);
+
+// Ajoutez les panneaux de boutons au panneau droit
+        droitPanel.add(boutonsNavigationPanel);
+        droitPanel.add(boutonAjoutPanierPanel);
+
+// Ajout du panneau droit à votre magasinPanel existant
+        magasinPanel.add(droitPanel);
+
+// Ajout des sous-panneaux au magasinPanel
+        magasinPanel.add(gauchePanel);
+        magasinPanel.add(centrePanel);
+        magasinPanel.add(droitPanel);
+
+// Ajout du magasinPanel au panel principal
         centerSouthPanel.add(magasinPanel);
+
 
         // JPanel de Panier (en bas)
         JPanel panierPanel = new JPanel();
@@ -157,6 +268,9 @@ public class VuePrincipale extends JFrame {
         loginItem.setVisible(etat);
         logoutItem.setVisible(!etat);
         changerMdpItem.setVisible(!etat);
+        boutonSuivant.setEnabled(!etat);
+        boutonPrecedent.setEnabled(!etat);
+        boutonAjoutPanier.setEnabled(!etat);
     }
 
     // Méthodes pour obtenir les éléments du menu
@@ -196,12 +310,48 @@ public class VuePrincipale extends JFrame {
         return JBoutonLogout;
     }
 
+    public String getTextFieldJacheteText() {
+        return textFieldJachete.getText();
+    }
+
+    public JButton getBoutonPrecedent() {
+        return boutonPrecedent;
+    }
+
+    public JButton getBoutonSuivant() {
+        return boutonSuivant;
+    }
+
+    public JButton getBoutonAjoutPanier() {
+        return boutonAjoutPanier;
+    }
+
+
+    // --------------------------- SET
+    public void setImageInGauchePanel(ImageIcon imageIcon) {
+        imageLabel.setIcon(imageIcon);
+    }
+    public void setTextFieldArticleText(String text) {
+        textFieldArticle.setText(text);
+    }
+
+    public void setTextFieldPrixText(String text) {
+        textFieldPrix.setText(text);
+    }
+
+    public void setTextFieldStockText(String text) {
+        textFieldStock.setText(text);
+    }
+
+
+
+    // ----------------------- MAIN
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             VueLancement vueLancement = new VueLancement();
             vueLancement.setVisible(true);
 
-            Timer timer = new Timer(5000, e -> {
+            Timer timer = new Timer(500, e -> {
                 vueLancement.dispose();
                 VuePrincipale vuePrincipale = new VuePrincipale();
                 Controleur controleur = new Controleur(vuePrincipale);

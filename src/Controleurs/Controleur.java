@@ -7,6 +7,8 @@ import java.beans.PropertyChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 
 public class Controleur {
 
@@ -15,6 +17,9 @@ public class Controleur {
 
     private JButton JBoutonLogin;
     private JButton JBoutonLogout;
+    private JButton boutonPrecedent;
+    private JButton boutonSuivant;
+    private JButton boutonAjoutPanier;
 
     public Controleur(VuePrincipale vue) {
         this.vue = vue;
@@ -22,6 +27,9 @@ public class Controleur {
 
         JBoutonLogin = vue.getJBoutonLogin();
         JBoutonLogout = vue.getJBoutonLogout();
+        boutonPrecedent = vue.getBoutonPrecedent();
+        boutonSuivant = vue.getBoutonSuivant();
+        boutonAjoutPanier = vue.getBoutonAjoutPanier();
 
         // MENUS
         // FICHIER
@@ -45,13 +53,44 @@ public class Controleur {
             }
         });
 
-        //PARTIE CHANGER MOT DE PASSE
+        // PARTIE CHANGER MOT DE PASSE
         vue.getChangerMdpItem().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 afficherBoiteDialogue();
             }
         });
 
+        // Ajoutez un écouteur de changement de propriété au modèle pour IdArticleEnCours
+        modele.addIdArticleChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                // Mettez à jour la vue en fonction du nouvel IDArticleEnCours ici
+                System.out.println("Changement de IdArticleEnCours ************** : " + evt.getNewValue());
+
+                String AdresseImage = Singleton.getInstance().getArticleEnCours().getImage();
+                String cheminImages = "images/"; // Le chemin vers le dossier images
+
+                // Combiner le chemin du dossier images avec le nom de l'image
+                String adresseImageComplete = cheminImages + AdresseImage;
+
+                // Charger l'image en tant qu'ImageIcon
+                ImageIcon imageIcon = new ImageIcon(adresseImageComplete); // Assurez-vous que AdresseImage est un chemin valide
+                System.out.println(adresseImageComplete);
+
+                // Redimensionner l'image si nécessaire
+                Image image = imageIcon.getImage(); // Transformer l'ImageIcon en Image pour redimensionnement
+                Image newimg = image.getScaledInstance(220, 220, java.awt.Image.SCALE_SMOOTH); // Redimensionner
+                imageIcon = new ImageIcon(newimg); // Re-transformer en ImageIcon
+
+                // Mettre à jour la vue avec la nouvelle image
+                vue.setImageInGauchePanel(imageIcon);
+                System.out.println("Vue mise à jour ... ");
+
+                vue.setTextFieldArticleText(Singleton.getInstance().getArticleEnCours().getDenomination());
+                vue.setTextFieldStockText(String.valueOf(Singleton.getInstance().getArticleEnCours().getQuantiteDisponible()));
+                vue.setTextFieldPrixText(String.valueOf(Singleton.getInstance().getArticleEnCours().getPrix()));
+            }
+        });
 
         // Ajoutez un écouteur de changement de propriété au modèle
         modele.addPropertyChangeListener(new PropertyChangeListener() {
@@ -63,8 +102,12 @@ public class Controleur {
                     boolean nouvelleValeur = (boolean) evt.getNewValue();
                     // Mettez à jour la vue en fonction de la nouvelle valeur
                     vue.setModificationEtat(!nouvelleValeur);
+                } else if ("IdArticleEnCours".equals(propertyName)) {
+                    System.out.println("J AI ETE PREVENU !!!!!!!!!!!!!!!!");
+                    // Récupération de l'adresse de l'image de l'article en cours
+                } else {
+                    System.out.println("RIEN");
                 }
-                // Ajoutez d'autres gestionnaires de propriété au besoin
             }
         });
 
@@ -72,6 +115,27 @@ public class Controleur {
         vue.getLoginItem().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 handleLoginButtonClick();
+            }
+        });
+
+        // PARTIE BOUTON PRECEDENT
+        boutonPrecedent.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                handleBoutonPrecedentClick();
+            }
+        });
+
+        // PARTIE BOUTON SUIVANT
+        boutonSuivant.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                handleBoutonSuivantClick();
+            }
+        });
+
+        // PARTIE BOUTON AJOUT PANIER
+        boutonAjoutPanier.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                handleBoutonAjoutPanierClick();
             }
         });
     }
@@ -112,5 +176,27 @@ public class Controleur {
     // Méthode pour afficher la boîte de dialogue
     private void afficherBoiteDialogue() {
         JOptionPane.showMessageDialog(vue, "Cette fonctionnalité est réservée à la version payante :P", "DEMO", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    // Méthodes pour gérer les clics sur les boutons
+
+    private void handleBoutonPrecedentClick() {
+        System.out.println("Précédent");
+        if(Singleton.getInstance().getIdArticleEnCours() < 2)
+        {
+            JOptionPane.showMessageDialog(vue, "Vous êtes au bout du rouleau !", "Information", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else
+        {
+
+        }
+    }
+
+    private void handleBoutonSuivantClick() {
+        System.out.println("Suivant");
+    }
+
+    private void handleBoutonAjoutPanierClick() {
+        System.out.println("Ajouté au panier");
     }
 }
